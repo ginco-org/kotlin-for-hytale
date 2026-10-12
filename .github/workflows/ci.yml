@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and verify carrier jar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v4
+      # The jar's entire job is carrying the Kotlin runtime for the whole
+      # server: verify the bundle actually contains it, not just that Gradle
+      # exited 0.
+      - name: Build and inspect jar
+        run: |
+          ./gradlew jar
+          python3 - <<'PY'
+          import zipfile, glob, sys, json
+          jar = glob.glob('build/libs/kotlin-for-hytale-*.jar')[0]
+          z = zipfile.ZipFile(jar)
+          names = z.namelist()
+          checks = {
+            'kotlin-stdlib classes': sum(1 for n in names if n.startswith('kotlin/') and n.endswith('.class')) > 100,
+            'kotlin-reflect classes': any(n.startswith('kotlin/reflect/jvm/internal/') for n in names),
+            'coroutines classes': any(n.startswith('kotlinx/coroutines/') for n in names),
+            'plugin main class': 'gg/ginco/kotlinforhytale/Plugin.class' in names,
+            'manifest': 'manifest.json' in names,
+          }
+          m = json.loads(z.read('manifest.json'))
+          checks['manifest names this plugin'] = m.get('Name') == 'KotlinForHytale' and (m.get('Main') or '').endswith('kotlinforhytale.Plugin')
+          checks['server version pinned'] = '0.6.8' in (m.get('ServerVersion') or '')
+          for k, v in checks.items(): print(('OK  ' if v else 'FAIL'), k)
+          if not all(checks.values()): sys.exit(1)
+          print(jar, len(names), 'entries — all checks passed')
+          PY
