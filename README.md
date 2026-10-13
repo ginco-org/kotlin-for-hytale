@@ -21,7 +21,7 @@ Drop the release jar into `mods/` next to your plugins. Nothing to configure.
 hytale {
     // hard dependency: the server refuses to load your plugin when the
     // runtime plugin is missing, and guarantees it loads before yours
-    depends("gg.ginco:KotlinForHytale", ">=0.1")
+    depends("gg.ginco:KotlinForHytale", ">=0.1.1")
     // never bundle the Kotlin runtime — it arrives through the bridge
     bundleDependencies = false   // or exclude it selectively (hygradle)
 }
@@ -47,7 +47,7 @@ shared source).
 
 ## Versioning
 
-`<carrier-version>+kotlin.<kotlin-version>` (e.g. `0.1.0+kotlin.2.3.21`),
+`<carrier-version>+kotlin.<kotlin-version>` (e.g. `0.1.1+kotlin.2.3.21`),
 like FLK. The suffix documents exactly which Kotlin runtime the jar carries;
 Kotlin bumps produce new carrier releases.
 

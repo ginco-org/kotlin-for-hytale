@@ -1,7 +1,7 @@
 import org.gradle.api.file.DuplicatesStrategy
 
 plugins {
-    // hygradle comes onto the classpath via gg.ginco.hygradle.settings (0.5.1)
+    // hygradle comes onto the classpath via gg.ginco.hygradle.settings (0.7.0)
     // in settings.gradle.kts, so no version is declared here.
     id("gg.ginco.hygradle")
     kotlin("jvm") version "2.3.21"
