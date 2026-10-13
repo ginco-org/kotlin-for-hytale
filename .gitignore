@@ -6,3 +6,9 @@ run/
 out/
 .direnv/
 bin/
+
+# local runtime server state (never plugin sources)
+universe/
+mods/
+bans.json
+
