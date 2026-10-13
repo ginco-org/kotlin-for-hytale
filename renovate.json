@@ -3,6 +3,10 @@
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
   "commitMessagePrefix": "chore(deps): ",
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "platformAutomerge": true,
   "description": "Shared Kotlin runtime for Hytale plugins: one with all runtime artifacts, so a server never forks stdlib identity (see README 'Rules that make this work').",
   "packageRules": [
     {
