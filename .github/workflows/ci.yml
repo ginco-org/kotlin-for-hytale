@@ -40,7 +40,7 @@ jobs:
           }
           m = json.loads(z.read('manifest.json'))
           checks['manifest names this plugin'] = m.get('Name') == 'KotlinForHytale' and (m.get('Main') or '').endswith('kotlinforhytale.Plugin')
-          checks['server version pinned'] = '0.6.8' in (m.get('ServerVersion') or '')
+          checks['server version pinned'] = m.get('ServerVersion','').startswith('=0.7')
           for k, v in checks.items(): print(('OK  ' if v else 'FAIL'), k)
           if not all(checks.values()): sys.exit(1)
           print(jar, len(names), 'entries — all checks passed')
