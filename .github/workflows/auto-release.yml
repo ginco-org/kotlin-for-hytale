@@ -1,0 +1,52 @@
+name: Auto release
+
+# Publishes the carrier jar whenever its version actually changes on main —
+# i.e. when a Kotlin runtime bump automerges. Wrapper bumps and chores don't
+# touch the version, so they never release. (Tags pushed with GITHUB_TOKEN
+# don't trigger other workflows, so build+release happens inline instead of
+# delegating to release.yml.)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release when the carrier version changed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tags decide whether anything is new
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Tag and publish if the version is new
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(sed -n 's/^version = "\(.*\)"$/\1/p' build.gradle.kts)
+          TAG="v${VERSION}"
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "$TAG already exists — nothing to release"
+            exit 0
+          fi
+          ./gradlew jar
+          python3 scripts/verify_jar.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" build/libs/kotlin-for-hytale-*.jar \
+            --title "kotlin-for-hytale $TAG" \
+            --notes "Automated carrier release for ${VERSION}."

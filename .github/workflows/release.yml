@@ -22,7 +22,9 @@ jobs:
       # stdlib/reflect/coroutines straight from Central; this artifact is
       # strictly the runtime carrier jar for servers.
       - name: Build jar
-        run: ./gradlew jar
+        run: |
+          ./gradlew jar
+          python3 scripts/verify_jar.py
       - name: Create release with carrier jar
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
