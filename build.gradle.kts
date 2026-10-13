@@ -10,7 +10,7 @@ plugins {
 group = "gg.ginco"
 // FLK-style dual version: carrier release + the Kotlin version carried.
 // Bump the second half whenever the pinned Kotlin modules below change.
-version = "0.1.0+kotlin.2.3.21"
+version = "0.1.1+kotlin.2.3.21"
 
 dependencies {
     // The carried Kotlin runtime. Everything here is bundled into the plugin
@@ -29,7 +29,7 @@ hytale {
     group = "gg.ginco"
     name = "KotlinForHytale"
     description = "Shared Kotlin runtime for Hytale plugins (stdlib, reflect, coroutines)"
-    serverVersion = "0.6.8"
+    serverVersion = "0.7.0"
     mainClass = "gg.ginco.kotlinforhytale.Plugin"
     // The whole point: this jar IS the carrier — bundle the Kotlin runtime
     // and ship one self-contained plugin jar per release.
