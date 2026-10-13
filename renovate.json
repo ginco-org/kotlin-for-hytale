@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "commitMessagePrefix": "chore(deps): ",
+  "description": "Shared Kotlin runtime for Hytale plugins: one with all runtime artifacts, so a server never forks stdlib identity (see README 'Rules that make this work').",
+  "packageRules": [
+    {
+      "description": "All Kotlin runtime artifacts move together — stdlib/reflect/plugin/coroutines plus the carrier suffix must stay in lockstep",
+      "matchManagers": ["gradle", "custom.regex"],
+      "matchPackageNames": [
+        "/^org\\.jetbrains\\.kotlin/",
+        "/^kotlinx-coroutines/"
+      ],
+      "groupName": "Kotlin runtime"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Track the pinned Kotlin version inside the FLK-style carrier version suffix (0.1.1+kotlin.2.3.21)",
+      "customType": "regex",
+      "managerFilePatterns": ["/^build\\.gradle\\.kts$/"],
+      "matchStrings": [
+        "version\\s*=\\s*\"(?<carrier>\\d+\\.\\d+\\.\\d+)\\+kotlin\\.(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "datasourceTemplate": "maven",
+      "packageNameTemplate": "org.jetbrains.kotlin:kotlin-stdlib"
+    },
+    {
+      "description": "Keep the kotlin-reflect startup-log literal in sync with the bundled version",
+      "customType": "regex",
+      "managerFilePatterns": ["/^src\\/main\\/kotlin\\/gg\\/ginco\\/kotlinforhytale\\/Plugin\\.kt$/"],
+      "matchStrings": [
+        "KotlinVersion\\.CURRENT\\.toString\\(\\),\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "datasourceTemplate": "maven",
+      "packageNameTemplate": "org.jetbrains.kotlin:kotlin-reflect"
+    },
+    {
+      "description": "Keep the coroutines startup-log literal in sync with the bundled version",
+      "customType": "regex",
+      "managerFilePatterns": ["/^src\\/main\\/kotlin\\/gg\\/ginco\\/kotlinforhytale\\/Plugin\\.kt$/"],
+      "matchStrings": [
+        ",\\s*\"\\d+\\.\\d+\\.\\d+\",\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"\\)"
+      ],
+      "datasourceTemplate": "maven",
+      "packageNameTemplate": "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+    }
+  ]
+}
