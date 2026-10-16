@@ -21,7 +21,7 @@
   ],
   "customManagers": [
     {
-      "description": "Track the pinned Kotlin version inside the FLK-style carrier version suffix (0.1.1+kotlin.2.3.21)",
+      "description": "Track the pinned Kotlin version inside the FLK-style carrier version suffix (0.1.2+kotlin.2.3.21)",
       "customType": "regex",
       "managerFilePatterns": ["/^build\\.gradle\\.kts$/"],
       "matchStrings": [
