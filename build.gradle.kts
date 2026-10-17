@@ -4,13 +4,13 @@ plugins {
     // hygradle comes onto the classpath via gg.ginco.hygradle.settings (0.7.1)
     // in settings.gradle.kts, so no version is declared here.
     id("gg.ginco.hygradle")
-    kotlin("jvm") version "2.3.21"
+    kotlin("jvm") version "2.4.21"
 }
 
 group = "gg.ginco"
 // FLK-style dual version: carrier release + the Kotlin version carried.
 // Bump the second half whenever the pinned Kotlin modules below change.
-version = "0.1.2+kotlin.2.3.21"
+version = "0.1.2+kotlin.2.4.21"
 
 dependencies {
     // The carried Kotlin runtime. Everything here is bundled into the plugin
@@ -19,7 +19,7 @@ dependencies {
     // plugin bridge (hard manifest dependencies are searched first, see
     // PluginManager.java). Do NOT add libraries that any consumer also
     // compiles against without intending them to be singletons server-wide.
-    api("org.jetbrains.kotlin:kotlin-reflect:2.3.21")
+    api("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     // kotlin-stdlib needs no declaration: the Kotlin Gradle plugin pins it
     // onto every source set and it flows into runtimeClasspath.
