@@ -17,7 +17,7 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
       # No Maven Central publication by design: consumers compile against
       # stdlib/reflect/coroutines straight from Central; this artifact is
       # strictly the runtime carrier jar for servers.
