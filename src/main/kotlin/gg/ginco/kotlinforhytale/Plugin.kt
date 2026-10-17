@@ -15,6 +15,6 @@ class Plugin(init: JavaPluginInit) : JavaPlugin(init) {
     override fun start() {
         logger.at(Level.INFO).log(
             "Kotlin runtime active (bundled stdlib %s, reflect %s, coroutines %s)",
-            KotlinVersion.CURRENT.toString(), "2.3.21", "1.11.0")
+            KotlinVersion.CURRENT.toString(), "2.4.21", "1.11.0")
     }
 }
